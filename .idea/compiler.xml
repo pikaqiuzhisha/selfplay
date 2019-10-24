@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="frog-import-service" />
+        <module name="frog-refund-service" />
+        <module name="frog-charge-service" />
+        <module name="frog-eureka-service" />
+        <module name="frog-gateway-service" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="frog-charge-service" target="1.8" />
+      <module name="frog-cloud-service" target="1.8" />
+      <module name="frog-eureka-service" target="1.8" />
+      <module name="frog-gateway-service" target="1.8" />
+      <module name="frog-import-service" target="1.8" />
+      <module name="frog-refund-service" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="frog-charge-service" options="-parameters" />
+      <module name="frog-eureka-service" options="-parameters" />
+      <module name="frog-gateway-service" options="-parameters" />
+      <module name="frog-import-service" options="-parameters" />
+      <module name="frog-refund-service" options="-parameters" />
+    </option>
+  </component>
+</project>
