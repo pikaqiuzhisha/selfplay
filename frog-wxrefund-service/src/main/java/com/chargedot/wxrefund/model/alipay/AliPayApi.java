@@ -1,0 +1,17 @@
+package com.chargedot.wxrefund.model.alipay;
+
+
+import com.lly835.bestpay.model.alipay.response.AliPayOrderQueryResponse;
+import retrofit2.Call;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
+
+import java.util.Map;
+
+public interface AliPayApi {
+
+    @FormUrlEncoded
+    @POST("gateway.do")
+    Call<AliPayOrderQueryResponse> orderQuery(@FieldMap Map<String, String> map);
+}
