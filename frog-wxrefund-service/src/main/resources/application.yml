@@ -403,9 +403,14 @@ push:
   user:
     url: https://minipro.elefrog.com:2443/
 
-wxpay:
-  appId: wx3d287da002d86404  #小程序appId
-  mchId: 1510523931         #顶蛙商户号
-  key: elecfrog201807261634363683848380  #顶蛙商户号api秘钥
-  https_refund_url: https://api.mch.weixin.qq.com/secapi/pay/refund
-  notify_url: https://weixin.qq.com/notify/  #  通知回调接口地址
+
+
+wechat:
+  mpAppId: wx3d287da002d86404
+  mchId: 1483xxxx1510523931
+  mchKey: elecfrog201807261634363683848380
+  keyPath: /var/weixin_cert/wxpay.p12
+  notifyUrl: https://weixin.qq.com/notify/
+  miniAppId: wxxxxxxxxxxx6bf9b
+  miniAppSecret: xxbc6xxxxxxxxxxxxxx9c49d
+  appAppId: wxxxxxxxxxxxx43b0

@@ -10,7 +10,7 @@ import java.util.Map;
  * 支付相关
  * Created by null on 2017/2/14.
  */
-public interface BestPayService {
+public interface BestPayController {
 
     /**
      * 发起支付.
