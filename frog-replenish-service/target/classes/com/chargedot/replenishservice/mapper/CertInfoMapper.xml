@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chargedot.replenishservice.mapper.CertInfoMapper">
+        <!--查询在线卡信息-->
+        <select id="QueryCertInfo" resultType="com.chargedot.replenishservice.model.CardStream">
+            SELECT
+            dco.order_number AS orderNumber,
+            dcs.created_at AS createdAt,
+            dc.cert_number AS certNumber,
+            dcs.change_value AS changeValue,
+            dcs.cur_real_value AS curRealValue,
+            dcs.cur_value AS curValue,
+            dcs.real_change_value AS realChangeValue,
+            dcs.remarks As remarks,
+            dcs.stream_type AS streamType,
+            dsu.name As name,
+            dc.finished_at AS finishedAt,
+            dco.charge_finish_reason AS chargeFinishReason,
+            dd.device_number AS deviceNumber,
+            dco.duration AS duration,
+            dco.duration_plan AS durationPlan,
+            ddp.status AS status,
+            ds.name AS dsname,
+            dco.order_status AS orderStatus,
+            dco.fee_detail_snap AS feeDetailSnap,
+            dco.pay_status AS payStatus,
+            dco.pay_type AS payType,
+            dco.payment AS payment,
+            ddp.port_name AS portName,
+            dco.refund_act AS refundAct,
+            dco.refund_virtual AS refundVirtual
+            FROM
+            dw_card_stream AS dcs
+            LEFT JOIN dw_cert AS dc ON dcs.card_id = dc.id
+            LEFT JOIN dw_charge_order AS dco ON dcs.order_id = dco.id
+            LEFT JOIN dw_system_user AS dsu ON dcs.operator_id = dsu.id
+            LEFT JOIN dw_station AS ds ON  dco.station_id=ds.id
+            LEFT JOIN dw_device AS dd ON  dco.device_id=dd.id
+            LEFT JOIN dw_device_port AS ddp ON dco.port_id=ddp.id
+            <where>
+                <if test="streamType!=null">
+                    <if test="streamType!=2">
+                        and dcs.stream_type != 2
+                    </if>
+                    <if test="streamType==2">
+                        and dcs.stream_type = 2
+                    </if>
+                </if>
+            </where>
+            ORDER BY
+            dcs.created_at DESC
+        </select>
+    <!--根据certNnmber查询在线卡信息-->
+<select id="QueryCertInfoByCertNumber" resultType="com.chargedot.replenishservice.model.CardStream">
+    SELECT
+    dco.order_number AS orderNumber,
+    dcs.created_at AS createdAt,
+    dc.cert_number AS certNumber,
+    dcs.change_value AS changeValue,
+    dcs.cur_real_value AS curRealValue,
+    dcs.cur_value AS curValue,
+    dcs.real_change_value AS realChangeValue,
+    dcs.remarks As remarks,
+    dcs.stream_type AS streamType,
+    dsu.name As name,
+    dc.finished_at AS finishedAt,
+    dco.charge_finish_reason AS chargeFinishReason,
+    dd.device_number AS deviceNumber,
+    dco.duration AS duration,
+    dco.duration_plan AS durationPlan,
+    ddp.status AS status,
+    ds.name AS dsname,
+    dco.order_status AS orderStatus,
+    dco.fee_detail_snap AS feeDetailSnap,
+    dco.pay_status AS payStatus,
+    dco.pay_type AS payType,
+    dco.payment AS payment,
+    ddp.port_name AS portName,
+    dco.refund_act AS refundAct,
+    dco.refund_virtual AS refundVirtual
+    FROM
+    dw_card_stream AS dcs
+    LEFT JOIN dw_cert AS dc ON dcs.card_id = dc.id
+    LEFT JOIN dw_charge_order AS dco ON dcs.order_id = dco.id
+    LEFT JOIN dw_system_user AS dsu ON dcs.operator_id = dsu.id
+    LEFT JOIN dw_station AS ds ON  dco.station_id=ds.id
+    LEFT JOIN dw_device AS dd ON  dco.device_id=dd.id
+    LEFT JOIN dw_device_port AS ddp ON dco.port_id=ddp.id
+    <where>
+        <if test="certNumber!=null">
+            dc.cert_number=#{certNumber}
+        </if>
+        <if test="streamType!=null">
+            <if test="streamType!=2">
+                and dcs.stream_type != 2 and dco.start_type==1
+            </if>
+            <if test="streamType==2">
+                and dcs.stream_type = 2 and dco.start_type==1
+            </if>
+        </if>
+    </where>
+    ORDER BY
+        dcs.created_at DESC
+</select>
+    <!--根据卡号查询充电记录-->
+    <select id="QueryChargeRecordByCertNumber" resultType="com.chargedot.replenishservice.model.ChargeRecord">
+        SELECT
+        dc.cert_number AS certNumber,
+        dco.started_at AS startedAt,
+        dco.order_status AS orderStatus,
+        dco.pay_status AS payStatus,
+        dco.order_number AS orderNumber,
+        dco.order_status AS orderStatus,
+        dd.device_number AS deviceNumber,
+        (TIMEDIFF (dco.started_at ,dco.finished_at )) AS durationTime,
+        ddp.status AS status,
+        dco.start_type AS startType
+        FROM
+        dw_cert AS dc
+        LEFT JOIN dw_charge_order AS dco ON dco.cert_id = dc.id
+        LEFT JOIN dw_device AS dd ON  dco.device_id=dd.id
+        LEFT JOIN dw_device_port AS ddp ON dco.port_id=ddp.id
+        WHERE dc.cert_number=#{certNumber}
+        <!--<where>
+            <if test="certNumber!=null">
+                dc.cert_number=#{certNumber}
+            </if>
+            <if test="streamType!=null">
+                <if test="streamType!=2">
+                    and dcs.stream_type != 2
+                </if>
+                <if test="streamType==2">
+                    and dcs.stream_type = 2
+                </if>
+            </if>
+        </where>-->
+        ORDER BY
+        dco.finished_at DESC
+    </select>
+
+<!-- 根据卡号查询对应的卡 -->
+    <select id="QueryCert" resultType="com.chargedot.replenishservice.model.DWCert">
+    SELECT
+        cert_number AS certNumber
+    FROM
+        dw_cert
+    WHERE
+        cert_Number=#{certNumber}
+    </select>
+
+<!--   根据订单号查询详细的充电记录-->
+<select id="QueryChargeRecordDetailByOrderNumber" resultType="com.chargedot.replenishservice.model.ChargeDetail">
+SELECT
+	dco.charge_finish_reason AS chargeFinishReason,
+    CONCAT(dd.province,dd.city,dd.district,dd.address) AS address,
+	dco.started_at AS startedAt,
+	dco.finished_at AS finishedAt,
+    dss.power AS power,
+	dd.device_number AS deviceNumber,
+	dco.duration AS duration,
+	dco.duration_plan AS durationPlan,
+	ddp.status AS status,
+	ds.name AS dsname,
+	dco.order_number AS orderNumber,
+	dco.fee_detail_snap AS feeDetailSnap,
+	dco.order_status AS orderStatus,
+	dco.pay_status AS payStatus,
+	dco.pay_type AS payType,
+	dco.payment AS payment,
+	ddp.port_number AS portNumber,
+	ddp.port_name AS portName,
+	dco.refund_act AS refundAct,
+	dco.refund_virtual AS refundVirtual,
+	dco.start_type AS startType,
+	dco.sampling_power AS samplingPower
+FROM
+	dw_charge_order AS dco
+LEFT JOIN dw_cert AS dc ON dco.cert_id = dc.id
+LEFT JOIN dw_station AS ds ON dco.station_id = ds.id
+LEFT JOIN dw_device AS dd ON dco.device_id = dd.id
+LEFT JOIN dw_device_port AS ddp ON dco.port_id = ddp.id
+LEFT JOIN dw_skuset_setting as dss ON dco.sku_pre_id=dss.id
+WHERE
+	dco.order_number =#{orderNumber}
+ORDER BY
+	dco.finished_at DESC
+    </select>
+
+</mapper>

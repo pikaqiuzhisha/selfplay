@@ -17,6 +17,18 @@ spring:
             - Path=/import/**
           filters:
             - StripPrefix=1
+        - id: frog-wechat-service
+          uri: lb://frog-wechat-service     #lb:从eureka中获取服务
+          predicates:
+            - Path=/wechat/**
+          filters:
+            - StripPrefix=1
+        - id: frog-replenish-service
+            uri: lb://frog-replenishservice-service     #lb:从eureka中获取服务
+            predicates:
+              - Path=/replenish/**
+            filters:
+              - StripPrefix=1
 
 logging:
   level:
@@ -58,6 +70,18 @@ spring:
             - Path=/import/**
           filters:
             - StripPrefix=1
+        - id: frog-wechat-service
+          uri: lb://frog-wechat-service     #lb:从eureka中获取服务
+          predicates:
+            - Path=/wechat/**
+          filters:
+            - StripPrefix=1
+        - id: frog-replenish-service
+            uri: lb://frog-replenishservice-service     #lb:从eureka中获取服务
+            predicates:
+              - Path=/replenish/**
+            filters:
+              - StripPrefix=1
 
 logging:
   level:
@@ -97,6 +121,18 @@ spring:
           uri: lb://frog-import-service     #lb:从eureka中获取服务
           predicates:
             - Path=/import/**
+          filters:
+            - StripPrefix=1
+        - id: frog-wechat-service
+          uri: lb://frog-wechat-service     #lb:从eureka中获取服务
+          predicates:
+            - Path=/wechat/**
+          filters:
+            - StripPrefix=1
+        - id: frog-replenish-service
+          uri: lb://frog-replenishservice-service     #lb:从eureka中获取服务
+          predicates:
+            - Path=/replenish/**
           filters:
             - StripPrefix=1
 
@@ -140,6 +176,18 @@ spring:
             - Path=/import/**
           filters:
             - StripPrefix=1
+        - id: frog-wechat-service
+          uri: lb://frog-wechat-service     #lb:从eureka中获取服务
+          predicates:
+            - Path=/wechat/**
+          filters:
+            - StripPrefix=1
+        - id: frog-replenish-service
+            uri: lb://frog-replenishservice-service     #lb:从eureka中获取服务
+            predicates:
+              - Path=/replenish/**
+            filters:
+              - StripPrefix=1
 
 logging:
   level:

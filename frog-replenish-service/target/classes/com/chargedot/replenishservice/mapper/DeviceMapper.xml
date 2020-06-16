@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chargedot.replenishservice.mapper.DeviceMapper">
+    <!--查询设备详细信息-->
+    <select id="queryDeviceDetail" resultType="com.chargedot.replenishservice.model.DeviceInfo">
+		SELECT
+			dd.device_number AS deviceNumber,
+			ds.name AS name,
+			ds.provider AS provider,
+			dd.apply_type AS applyType,
+			dd.charge_type AS chargeType,
+			dd.device_status AS deviceStatus,
+			dd.port_cnt AS portCnt,
+			dd.open_forbusiness_date AS openForBusinessDate,
+			dd.serve_year AS serveYear,
+			ds.longitude AS longitude,
+			ds.latitude AS latitude,
+			CONCAT(dd.city,dd.district) AS addressLocation,
+			dd.address AS address,
+			dd.sim_number AS simNumber,
+			dd.sim_expired_at AS simExpiredAt,
+			dd.device_status AS dDeviceStatus,
+			dd.net_info AS netInfo
+		FROM
+		dw_device AS dd
+		LEFT JOIN dw_station AS ds  ON dd.station_id=ds.id
+		WHERE
+			dd.device_number=#{deviceNumber}
+</select>
+
+</mapper>

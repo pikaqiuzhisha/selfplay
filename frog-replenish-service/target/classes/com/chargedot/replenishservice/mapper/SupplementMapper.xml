@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chargedot.replenishservice.mapper.SupplementMapper">
+    <!--    用户号鉴权-->
+
+    <select id="UserAuth" resultType="com.chargedot.replenishservice.model.User">
+    SELECT
+        id,
+        status,
+        type
+    FROM
+        dw_user
+    WHERE id=#{userId}
+    </select>
+<!--  查看用户绑了几张附属卡  -->
+    <select id="SelectSupplyCards" resultType="integer">
+        SELECT
+        count(*)
+        FROM
+        dw_user a
+       LEFT JOIN dw_cert b ON a.id = b.user_id
+        AND b.type = 5
+        AND b.cert_status IN (1, 2)
+        AND b.is_del = 0
+        WHERE
+        a.id = #{userId}
+        and b.cert_number != #{certNumber}
+    </select>
+
+    <!--查询是否可以绑卡-->
+    <select id="SupplymentCardBangdadQuery" resultType="com.chargedot.replenishservice.model.DWCert">
+    SELECT
+        id AS id,
+        cert_number AS certNumber,
+        user_id AS userId,
+        cert_status AS certStatus,
+        type AS type,
+        remarks  AS remarks,
+        cur_value AS curValue,
+        real_value AS realValue
+    FROM
+        dw_cert
+    WHERE
+        cert_Number=#{certNumber}
+</select>
+
+    <!--绑卡-->
+    <update id="SupplymentCardBangdaged">
+    UPDATE dw_cert AS dc SET dc.user_id=#{userId} where dc.cert_number=#{certNumber}
+</update>
+
+    <!--挂失-->
+<update id="SupplymentCardDroped">
+    UPDATE dw_cert AS dc SET dc.cert_status=3 WHERE dc.cert_number=#{certNumber}
+</update>
+
+    <!--回显展示卡信息-->
+    <select id="DisplayCertInfo" resultType="com.chargedot.replenishservice.model.DisplayInfo">
+    SELECT
+    a.id AS userid,
+    a.city AS city,
+    a.phone AS phone,
+    b.real_value AS realValue,
+    b.cur_value AS curValue,
+    b.cert_number AS certNumber,
+    b.cert_status AS certStatus,
+    c.cert_number as bindCertNumber,
+    c.cert_status as bindCertStatus
+    FROM
+    dw_user a
+    JOIN dw_cert b ON a.id = b.user_id
+    AND b.type = 4
+    AND b.is_del = 0
+    LEFT JOIN dw_cert c ON a.id = c.user_id
+    AND c.type = 5
+    AND c.is_del = 0
+    WHERE
+    a.id =#{userId}
+    ORDER BY c.cert_status
+    </select>
+<!--    根据SESSIONID查询充电记录-->
+    <select id="displayChargeRecord" resultType="com.chargedot.replenishservice.model.ChargeRecord">
+                SELECT
+        dco.started_at AS startedAt,
+        dco.pay_status AS payStatus,
+        dco.order_status AS orderStatus,
+        dco.order_number AS orderNumber,
+        dd.device_number AS deviceNumber,
+        (TIMEDIFF (dco.started_at ,dco.finished_at )) AS durationTime,
+        ddp.status AS status,
+        dco.order_status AS orderStatus,
+        dco.finished_at AS finishedAt,
+        dco.start_type AS startType
+        FROM
+        dw_cert AS dc
+        LEFT JOIN dw_charge_order AS dco ON dco.cert_id = dc.id
+        LEFT JOIN dw_device AS dd ON  dco.device_id=dd.id
+        LEFT JOIN dw_device_port AS ddp ON dco.port_id=ddp.id
+        WHERE dco.user_id=#{userId}
+        ORDER BY
+        dco.finished_at DESC
+    </select>
+
+
+    <!--根据SSESSIONID查询充电记录-->
+    <select id="queryChargeOrderDetailBySESSIONID" resultType="com.chargedot.replenishservice.model.ChargeOrder">
+        SELECT
+        ddp.try_occupy_user_id AS tryOccupyUserId,
+        (TIMEDIFF (CURRENT_TIMESTAMP,dco.started_at)) AS durationTime,
+        dco.order_number AS orderNumber,
+        ds.name AS name,
+        dd.device_number AS deviceNumber,
+        dco.started_at AS startedAt
+        FROM
+        dw_charge_order AS dco
+        LEFT JOIN dw_device AS dd ON  dco.device_id=dd.id
+        LEFT JOIN dw_station AS ds ON dco.station_id=ds.id
+        LEFT JOIN dw_device_port AS ddp on dco.port_id=ddp.id
+        WHERE dco.user_id=#{userId} AND dco.order_status=2
+        ORDER BY dco.started_at
+    </select>
+<!-- 将充值卡改为附属卡-->
+    <update id="updateTypeToSup">
+        <![CDATA[
+      UPDATE dw_cert
+        SET dw_cert.type = 5
+        WHERE
+        dw_cert.type = 3
+        AND dw_cert.cur_value <= 0
+        AND dw_cert.real_value <= 0
+        AND dw_cert.cert_number = #{certNumber}
+        ]]>
+    </update>
+</mapper>

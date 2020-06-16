@@ -1,0 +1,60 @@
+{
+  "groups": [
+    {
+      "name": "wechat",
+      "type": "com.chargedot.wechat.config.WechatAccountConfig",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "wechat.app-app-id",
+      "type": "java.lang.String",
+      "description": "app应用appid 获取地址 https:\/\/open.weixin.qq.com",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.key-path",
+      "type": "java.lang.String",
+      "description": "商户证书路径",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.mch-id",
+      "type": "java.lang.String",
+      "description": "商户号 获取地址 https:\/\/pay.weixin.qq.com",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.mch-key",
+      "type": "java.lang.String",
+      "description": "商户密钥",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.mini-app-id",
+      "type": "java.lang.String",
+      "description": "小程序appId 获取地址 https:\/\/mp.weixin.qq.com",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.mini-app-secret",
+      "type": "java.lang.String",
+      "description": "小程序appSecret",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.mp-app-id",
+      "type": "java.lang.String",
+      "description": "公众账号appid 获取地址 https:\/\/mp.weixin.qq.com",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    },
+    {
+      "name": "wechat.notify-url",
+      "type": "java.lang.String",
+      "description": "微信支付异步通知地址",
+      "sourceType": "com.chargedot.wechat.config.WechatAccountConfig"
+    }
+  ],
+  "hints": []
+}
