@@ -15,11 +15,11 @@ public class ChargeOrder {
     private String orderNumber;
 
     private Integer userId;
-
+//的叫法是解放军范德萨就放到
     private Long certId;
 
     private Integer portId;
-
+//四季度房价是打飞机阿斯顿福建
     private Integer deviceId;
 
     private Integer stationId;
